@@ -1,8 +1,7 @@
-use std::io::{stdin, stdout, Write};
 use std::fs;
+use std::io::{stdin, stdout, Write};
 
 fn main() {
-    
     loop {
         let mut arg = String::new();
 
@@ -14,8 +13,7 @@ fn main() {
         }
 
         // Read user input.
-        match stdin()
-        .read_line(&mut arg) {
+        match stdin().read_line(&mut arg) {
             Ok(_) => (),
             Err(_) => continue,
         }
@@ -41,7 +39,6 @@ fn main() {
 
 
         };
-
     }
 }
 
@@ -51,7 +48,7 @@ fn cat(file_path: &str) -> Result<usize, std::io::Error> {
         Err(e) => return Err(e),
         Ok(a) => {
             println!("{}", a);
-            return Ok(a.len())
+            return Ok(a.len());
         }
     };
 }

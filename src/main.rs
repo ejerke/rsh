@@ -5,7 +5,7 @@ use std::{env, fs};
 fn main() {
     loop {
         // Print the start-of-line char.
-        print!("¤ ");
+        print!("& ");
         match stdout().flush() {
             Ok(_) => (),
             Err(_) => (),
@@ -27,6 +27,14 @@ fn main() {
         }
 
         match  arg_handler[0] {
+            "exec" => {
+                if arg_handler.len() == 1 || arg_handler.len() > 2 {
+                    println!("Wrong syntax, use: 'exec [argument]'\n A valid argument is an absolute or relative path to an executable.")
+                }
+                else {
+                    exec(arg_handler[1]);
+                }
+            }
             "cd" => {
                 if arg_handler.len() == 1 || arg_handler.len() > 2 {
                     println!("Wrong syntax, use: 'cd [argument]'\n A valid argument is an absolute or relative path.")
@@ -65,6 +73,27 @@ fn main() {
             
 
         };
+    }
+}
+
+fn exec(exe: &str) {
+    let full = Path::new(exe);
+    if full.is_absolute() {
+        let out = std::process::Command::new(exe).status();
+        println!("Done with exit code {}", out.unwrap_or_default());
+    }
+    else {
+
+        match exe.chars().nth(0).unwrap_or('a') {
+            '.' => {
+                let cwd = env::current_dir().unwrap_or_default();
+                let full_path = Path::new(&cwd);
+                let executable = full_path.join(Path::new(exe));
+                let out = std::process::Command::new(executable).status();
+                println!("Done with exit code {}", out.unwrap_or_default());
+            },
+            _ => (),
+        }
     }
 }
 

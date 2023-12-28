@@ -66,12 +66,8 @@ fn main() {
                 };
             },
             "exit" => break,
-            "help" => println!("Available commands:\n help   see this text.\n exit   exit the shell.\n cat    output the contents of a file.\n pwd    Print working directory.\n ls     List contents of working directory.\n cd     Change working directory."),
+            "help" => println!("Available commands:\n help   see this text.\n exit   exit the shell.\n cat    output the contents of a file.\n pwd    Print working directory.\n ls     List contents of working directory.\n cd     Change working directory.\n exec   run an executable."),
             _ => println!("Unrecognized command, see available commands with 'help'.")
-
-
-            
-
         };
     }
 }
@@ -81,9 +77,7 @@ fn exec(exe: &str) {
     if full.is_absolute() {
         let out = std::process::Command::new(exe).status();
         println!("Done with exit code {}", out.unwrap_or_default());
-    }
-    else {
-
+    } else {
         match exe.chars().nth(0).unwrap_or('a') {
             '.' => {
                 let cwd = env::current_dir().unwrap_or_default();
@@ -91,7 +85,7 @@ fn exec(exe: &str) {
                 let executable = full_path.join(Path::new(exe));
                 let out = std::process::Command::new(executable).status();
                 println!("Done with exit code {}", out.unwrap_or_default());
-            },
+            }
             _ => (),
         }
     }
@@ -107,11 +101,11 @@ fn cd(dir: &str) {
 }
 
 fn ls(dir: &str) {
-    match fs::read_dir(dir){
+    match fs::read_dir(dir) {
         Err(_) => {
             println!("Invalid directory!");
             return;
-        },
+        }
         Ok(a) => {
             let paths = a;
             for path in paths {
@@ -119,8 +113,6 @@ fn ls(dir: &str) {
             }
         }
     };
-
-
 }
 
 fn pwd() {
